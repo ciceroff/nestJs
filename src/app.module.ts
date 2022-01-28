@@ -5,13 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { GraphQLModule} from '@nestjs/graphql'
 import { join } from 'path'
 import { UserModule } from './user/user.module';
+import { GameModule } from './game/game.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql')
     }),
-    UserModule
+    UserModule,
+    GameModule
   ],
   controllers: [AppController],
   providers: [AppService],

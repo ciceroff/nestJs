@@ -9,15 +9,30 @@ type User {
   password: String!
 }
 
+type Game {
+  id: ID!
+  type: String!
+  description: String!
+  range: Float!
+  price: Float!
+  max_number: Float!
+  color: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Float!): User!
+  games: [Game!]!
+  game(id: Float!): Game!
 }
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!, id: Float!): User!
   deleteUser(id: Float!): Boolean!
+  createGame(data: CreateGameInput!): Game!
+  deleteGame(id: Float!): Boolean!
+  updateGame(data: UpdateGameInput!, id: Float!): Game!
 }
 
 input CreateUserInput {
@@ -29,4 +44,22 @@ input CreateUserInput {
 input UpdateUserInput {
   name: String
   email: String
+}
+
+input CreateGameInput {
+  type: String!
+  description: String!
+  range: Float!
+  price: Float!
+  max_number: Float!
+  color: String!
+}
+
+input UpdateGameInput {
+  type: String
+  description: String
+  range: Float
+  price: Float
+  max_number: Float
+  color: String
 }
