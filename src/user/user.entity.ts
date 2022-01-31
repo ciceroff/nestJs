@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import * as bcrypt from 'bcrypt'
 @ObjectType()
 @Entity()
 export class User{
@@ -16,4 +16,19 @@ export class User{
 
     @Column()
     password: string;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hash(): Promise<boolean>{
+        const saltOrRounds = 10
+        const password = this.password
+        try {
+            const hash = await bcrypt.hash(password, saltOrRounds)
+            this.password = hash
+            return true
+        } catch (error) {
+            return false
+        }
+        
+    }
 }

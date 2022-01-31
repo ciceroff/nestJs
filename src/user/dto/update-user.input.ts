@@ -11,4 +11,9 @@ export class UpdateUserInput{
     @IsEmail()
     @IsNotEmpty({message: "Email field can not be empty"})
     email?: string
+
+    @IsOptional()
+    @IsEmail()
+    @IsNotEmpty({message: "Password field can not be empty"})
+    password?: string
 }

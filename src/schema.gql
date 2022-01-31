@@ -19,9 +19,14 @@ type Game {
   color: String!
 }
 
+type AuthType {
+  user: User!
+}
+
 type Query {
   users: [User!]!
   user(id: Float!): User!
+  userByEmail(email: String!): User!
   games: [Game!]!
   game(id: Float!): Game!
 }
@@ -33,6 +38,7 @@ type Mutation {
   createGame(data: CreateGameInput!): Game!
   deleteGame(id: Float!): Boolean!
   updateGame(data: UpdateGameInput!, id: Float!): Game!
+  login(data: AuthInput!): AuthType!
 }
 
 input CreateUserInput {
@@ -44,6 +50,7 @@ input CreateUserInput {
 input UpdateUserInput {
   name: String
   email: String
+  password: String
 }
 
 input CreateGameInput {
@@ -62,4 +69,9 @@ input UpdateGameInput {
   price: Float
   max_number: Float
   color: String
+}
+
+input AuthInput {
+  email: String!
+  password: String!
 }
