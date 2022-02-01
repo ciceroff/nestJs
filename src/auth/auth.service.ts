@@ -10,7 +10,7 @@ export class AuthService {
 
     async validateUser(data: AuthInput): Promise<AuthType>{
         const user = await this.userService.getUserByEmail(data.email)
-        const validPassword = bcrypt.compare(data.password, user.password)
+        const validPassword = await bcrypt.compare(data.password, user.password)
 
         if(!validPassword){
             throw new UnauthorizedException('Incorrect Password')
