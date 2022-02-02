@@ -1,5 +1,6 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RoleService } from 'src/role/role.service';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -9,12 +10,12 @@ import { User } from './user.entity';
 export class UserService {
     constructor(
         @InjectRepository(User)
-        private userRepository: Repository<User>
+        private userRepository: Repository<User>,
+        private roleService: RoleService
     ){}
     
     async findAllUsers(): Promise<User[]>{
         const users = await this.userRepository.find()
-
         return users
     }
 
@@ -25,10 +26,18 @@ export class UserService {
         }
         return user
     }
-    async createUser(data: CreateUserInput): Promise<User> {
-        const user = this.userRepository.create(data);
-        const userSaved = await this.userRepository.save(user)
 
+    async createUser(data: CreateUserInput): Promise<User> {
+        const email = await this.userRepository.findOne({where:{email: data.email}})
+        if(email)
+            throw new BadRequestException('Email already in use')
+
+        const user = this.userRepository.create(data);
+        
+        const role = await this.roleService.getRoleByName('player')
+        user.roles = [role]
+        const userSaved = await this.userRepository.save(user)
+        const roles = await this.userRepository.find({relations: ['roles']})
         if(!userSaved){
             throw new InternalServerErrorException('Problem when creating user')
         }

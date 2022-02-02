@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
+import { Role } from "src/role/role.entity";
+import { Bet } from "src/bet/bet.entity";
 @ObjectType()
 @Entity()
 export class User{
@@ -16,6 +18,13 @@ export class User{
 
     @Column()
     password: string;
+
+    @OneToMany(()=> Bet, (bet) => bet.user_id)
+    bets: Bet[]
+    
+    @ManyToMany(() => Role)
+    @JoinTable()
+    roles: Role[]
 
     @BeforeInsert()
     @BeforeUpdate()

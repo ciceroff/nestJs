@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRoleInput } from './dto/create-role.input';
@@ -14,6 +14,14 @@ export class RoleService {
     async getAllRoles(): Promise<Role[]>{
         const roles = await this.roleRepository.find()
         return roles
+    }
+
+    async getRoleByName(name: string): Promise<Role>{
+        const role = await this.roleRepository.findOne({where:{role_name: name}})
+        if (!role)
+            throw new NotFoundException('Role not found')
+
+        return role
     }
 
     async getUserRoles(id: number): Promise<Role[]>{

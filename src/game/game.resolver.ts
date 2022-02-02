@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { GqlAuthGuard } from 'src/auth/auth.guard';
 import { CreateGameInput } from './dto/create-game.input';
 import { UpdateGameInput } from './dto/update-game.input';
 import { Game } from './game.entity';
@@ -9,7 +11,8 @@ export class GameResolver {
     constructor(
         private gameService: GameService
     ){}
-
+    
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Game)
     async createGame(
         @Args('data') data: CreateGameInput
@@ -18,12 +21,14 @@ export class GameResolver {
         return game
     }
 
+    @UseGuards(GqlAuthGuard)
     @Query(() => [Game])
     async games(): Promise<Game[]>{
         const games = await this.gameService.findAllGames()
         return games
     }
 
+    @UseGuards(GqlAuthGuard)
     @Query(() => Game)
     async game( 
         @Args('id') id:number
@@ -32,6 +37,7 @@ export class GameResolver {
         return game
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     async deleteGame(
         @Args('id') id:number
@@ -40,6 +46,7 @@ export class GameResolver {
         return deleted
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Game)
     async updateGame(
         @Args('id') id:number,
