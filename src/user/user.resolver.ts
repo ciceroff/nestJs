@@ -14,6 +14,7 @@ export class UserResolver {
     ){}
     
     @UseGuards(GqlAuthGuard)
+    @UseGuards(isAdminGuard)
     @Query(() => [User])
     async users(): Promise<User[]>{
         const users = await this.userService.findAllUsers();
@@ -28,7 +29,7 @@ export class UserResolver {
         const user = await this.userService.findUserById(id);
         return user
     }
-
+    @UseGuards(GqlAuthGuard)
     @Query(() => User)
     async userByEmail(@Args('email') email:string): Promise<User>{
         return this.userService.getUserByEmail(email)
@@ -41,6 +42,7 @@ export class UserResolver {
         return user; 
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
     async updateUser(
         @Args('id') id:number, @Args('data') data: UpdateUserInput,
@@ -49,6 +51,7 @@ export class UserResolver {
         return user
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     async deleteUser(@Args('id') id: number): Promise<Boolean>{
         const deleted = await this.userService.deleteUser(id)

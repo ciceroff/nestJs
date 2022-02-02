@@ -2,11 +2,9 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type Role {
   id: ID!
-  name: String!
-  email: String!
-  password: String!
+  role_name: String!
 }
 
 type Game {
@@ -17,6 +15,25 @@ type Game {
   price: Float!
   max_number: Float!
   color: String!
+  bets: [Bet!]!
+}
+
+type Bet {
+  id: ID!
+  game: Game!
+  user: User!
+  filled_numbers: String!
+  user_id: Float!
+  game_id: Float!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  bets: [Bet!]!
+  roles: [Role!]!
 }
 
 type AuthType {
@@ -28,18 +45,25 @@ type Query {
   users: [User!]!
   user(id: Float!): User!
   userByEmail(email: String!): User!
+  roles: [Role!]!
+  userRoles(id: Float!): [Role!]!
   games: [Game!]!
   game(id: Float!): Game!
+  bets: [Bet!]!
+  bet(id: Float!): Bet!
 }
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!, id: Float!): User!
   deleteUser(id: Float!): Boolean!
+  createRole(data: CreateRoleInput!): Role!
   createGame(data: CreateGameInput!): Game!
   deleteGame(id: Float!): Boolean!
   updateGame(data: UpdateGameInput!, id: Float!): Game!
   login(data: AuthInput!): AuthType!
+  createBet(data: CreateBetInput!): Bet!
+  deleteBet(id: Float!): Boolean!
 }
 
 input CreateUserInput {
@@ -52,6 +76,10 @@ input UpdateUserInput {
   name: String
   email: String
   password: String
+}
+
+input CreateRoleInput {
+  role_name: String!
 }
 
 input CreateGameInput {
@@ -75,4 +103,10 @@ input UpdateGameInput {
 input AuthInput {
   email: String!
   password: String!
+}
+
+input CreateBetInput {
+  filled_numbers: String!
+  user_id: Float!
+  game_id: Float!
 }

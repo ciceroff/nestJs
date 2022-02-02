@@ -7,6 +7,8 @@ import { join } from 'path'
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { AuthModule } from './auth/auth.module';
+import { BetModule } from './bet/bet.module';
+import { RoleModule } from './role/role.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
@@ -16,7 +18,9 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     GameModule,
-    AuthModule
+    AuthModule,
+    BetModule,
+    RoleModule
   ],
   controllers: [AppController],
   providers: [AppService],

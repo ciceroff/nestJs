@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { isAdminGuard } from 'src/auth/admin.guard';
 import { GqlAuthGuard } from 'src/auth/auth.guard';
 import { CreateGameInput } from './dto/create-game.input';
 import { UpdateGameInput } from './dto/update-game.input';
@@ -37,6 +38,7 @@ export class GameResolver {
         return game
     }
 
+    @UseGuards(isAdminGuard)
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     async deleteGame(
@@ -46,6 +48,7 @@ export class GameResolver {
         return deleted
     }
 
+    @UseGuards(isAdminGuard)
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Game)
     async updateGame(

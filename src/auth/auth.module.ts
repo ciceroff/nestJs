@@ -8,16 +8,20 @@ import { UserService } from 'src/user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
+import { RoleModule } from 'src/role/role.module';
+import { Role } from 'src/role/role.entity';
+import { RoleService } from 'src/role/role.service';
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role]),
     UserModule,
+    RoleModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {expiresIn: '2d'}
     })
   ],
-  providers: [AuthService, AuthResolver, UserService, JwtStrategy]
+  providers: [AuthService, AuthResolver, UserService, JwtStrategy, RoleService]
 })
 export class AuthModule {} 
