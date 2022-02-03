@@ -23,8 +23,8 @@ type Bet {
   game: Game!
   user: User!
   filled_numbers: String!
-  user_id: Float!
-  game_id: Float!
+  userId: Float!
+  gameId: Float!
 }
 
 type User {
@@ -107,6 +107,6 @@ input AuthInput {
 
 input CreateBetInput {
   filled_numbers: String!
-  user_id: Float!
-  game_id: Float!
+  userId: Float!
+  gameId: Float!
 }

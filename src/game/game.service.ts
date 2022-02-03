@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundError } from 'rxjs';
 import { Repository } from 'typeorm';
@@ -14,6 +14,10 @@ export class GameService {
     ){}
     
     async createGame(data: CreateGameInput): Promise<Game>{
+        const repeated = await this.gameRepository.findOne({where:{type: data.type}})
+        if(repeated)   
+            throw new BadRequestException('Type already exists')
+            
         const game = this.gameRepository.create(data)
         const gameSave = await this.gameRepository.save(game)
 

@@ -19,7 +19,7 @@ export class User{
     @Column()
     password: string;
 
-    @OneToMany(()=> Bet, (bet) => bet.user_id)
+    @OneToMany(()=> Bet, (bet) => bet.userId)
     bets: Bet[]
     
     @ManyToMany(() => Role)

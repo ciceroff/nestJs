@@ -9,9 +9,9 @@ export class CreateBetInput{
 
     @IsNumber()
     @IsNotEmpty()
-    user_id: number
+    userId: number
 
     @IsNumber()
     @IsNotEmpty()
-    game_id:number
+    gameId:number
 }

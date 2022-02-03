@@ -20,15 +20,15 @@ export class BetService {
     }
 
     async createBet(data: CreateBetInput): Promise<Bet>{
-        const game = await this.gameRepository.findOne(data.game_id)
+        const game = await this.gameRepository.findOne(data.gameId)
         let filled_numbers = data.filled_numbers.split(',')
         
-        if(filled_numbers.length != game.range){
-            throw new BadRequestException(`The bet should have${game.range} numbers`)
+        if(filled_numbers.length != game.max_number){
+            throw new BadRequestException(`The bet should have ${game.max_number} numbers`)
         }
 
         filled_numbers.forEach((element) => {
-            if(parseInt(element) <= 0 || parseInt(element) > game.max_number)
+            if(parseInt(element) <= 0 || parseInt(element) > game.range)
                 throw new BadRequestException(`The numbers can not be bigger than ${game.max_number}`)
         })
         const bet = this.betRepository.create(data)

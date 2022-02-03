@@ -27,6 +27,6 @@ export class Game{
     @Column()
     color: string;
 
-    @OneToMany(()=> Bet, (bet) => bet.game_id)
+    @OneToMany(()=> Bet, (bet) => bet.gameId)
     bets: Bet[]
 }

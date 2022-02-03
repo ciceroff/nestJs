@@ -19,9 +19,9 @@ export class Bet{
     @Column()
     filled_numbers: string
 
-    @Column()
-    user_id: number
+    @Column({nullable: true})
+    userId: number
 
-    @Column()
-    game_id: number
+    @Column({nullable: true})
+    gameId: number
 }
