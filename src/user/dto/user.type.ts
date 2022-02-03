@@ -1,16 +1,13 @@
 import {Field, ObjectType} from '@nestjs/graphql'
 import { IsString } from 'class-validator'
+import { Bet } from 'src/bet/bet.entity'
 import {User} from 'src/user/user.entity'
 
 @ObjectType()
-export class AuthType{
+export class UserType{
     @Field(() => User)
     user: User
 
-    @Field()
-    @IsString()
-    token: string
-
-    @Field(() => [String])
-    userRoles: string[]
+    @Field(() => [Bet])
+    bets: Bet[]
 }

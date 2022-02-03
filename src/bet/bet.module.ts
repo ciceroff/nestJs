@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { BetService } from './bet.service';
 import { BetResolver } from './bet.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,8 +14,8 @@ import { Role } from 'src/role/role.entity';
 @Module({
   imports:[
     TypeOrmModule.forFeature([Bet, Game, User, Role]),
-    UserModule,
-    RoleModule
+    forwardRef(()=>UserModule),
+    forwardRef(()=>RoleModule)
   ],
   providers: [BetService, BetResolver, UserService, RoleService]
 })

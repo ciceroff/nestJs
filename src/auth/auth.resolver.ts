@@ -12,7 +12,8 @@ export class AuthResolver {
         const response = await this.authService.validateUser(data)
         return{
             user: response.user,
-            token: response.token
+            token: response.token,
+            userRoles: response.userRoles
         }
     }
 }

@@ -18,7 +18,7 @@ export class Game{
     @Column()
     range: number;
 
-    @Column()
+    @Column({type: 'float'})
     price: number;
 
     @Column()

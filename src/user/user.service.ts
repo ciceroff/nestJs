@@ -1,9 +1,11 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BetService } from 'src/bet/bet.service';
 import { RoleService } from 'src/role/role.service';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { UserType } from './dto/user.type';
 import { User } from './user.entity';
 
 @Injectable()
@@ -11,7 +13,8 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        private roleService: RoleService
+        private roleService: RoleService,
+        private betService: BetService
     ){}
     
     async findAllUsers(): Promise<User[]>{
@@ -19,12 +22,19 @@ export class UserService {
         return users
     }
 
-    async findUserById(id: number): Promise<User>{
+    async findUserById(id: number): Promise<UserType>{
         const user = await this.userRepository.findOne(id)
+        
         if(!user){
             throw new NotFoundException('User not found')
         }
-        return user
+        const bets = await this.betService.findUsersBet(id)
+        return {user, bets}
+    }
+
+    async getUsersRoles(id: number): Promise<User[]>{
+        const roles = await this.userRepository.find({relations: ['roles'], where: {id: id}})
+        return roles
     }
 
     async createUser(data: CreateUserInput): Promise<User> {

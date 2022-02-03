@@ -13,6 +13,7 @@ export class GameResolver {
         private gameService: GameService
     ){}
     
+    @UseGuards(isAdminGuard)
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Game)
     async createGame(

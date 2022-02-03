@@ -19,6 +19,10 @@ export class BetService {
         return bets
     }
 
+    async findUsersBet(id: number): Promise<Bet[]>{
+        const bets = await this.betRepository.find({where: {userId: id}})
+        return bets
+    }
     async createBet(data: CreateBetInput): Promise<Bet>{
         const game = await this.gameRepository.findOne(data.gameId)
         let filled_numbers = data.filled_numbers.split(',')

@@ -1,9 +1,11 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql';
 import { isAdminGuard } from 'src/auth/admin.guard';
 import { GqlAuthGuard } from 'src/auth/auth.guard';
+import { Any } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { UserType } from './dto/user.type';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -22,10 +24,10 @@ export class UserResolver {
     }
 
     @UseGuards(GqlAuthGuard)
-    @Query(() => User)
+    @Query(() => UserType)
     async user(
         @Args('id') id: number
-    ): Promise<User>{
+    ){
         const user = await this.userService.findUserById(id);
         return user
     }
@@ -51,6 +53,7 @@ export class UserResolver {
         return user
     }
 
+    @UseGuards(isAdminGuard)
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     async deleteUser(@Args('id') id: number): Promise<Boolean>{

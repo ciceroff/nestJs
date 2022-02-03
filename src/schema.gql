@@ -7,15 +7,13 @@ type Role {
   role_name: String!
 }
 
-type Game {
+type User {
   id: ID!
-  type: String!
-  description: String!
-  range: Float!
-  price: Float!
-  max_number: Float!
-  color: String!
+  name: String!
+  email: String!
+  password: String!
   bets: [Bet!]!
+  roles: [Role!]!
 }
 
 type Bet {
@@ -27,30 +25,38 @@ type Bet {
   gameId: Float!
 }
 
-type User {
+type Game {
   id: ID!
-  name: String!
-  email: String!
-  password: String!
+  type: String!
+  description: String!
+  range: Float!
+  price: Float!
+  max_number: Float!
+  color: String!
   bets: [Bet!]!
-  roles: [Role!]!
+}
+
+type UserType {
+  user: User!
+  bets: [Bet!]!
 }
 
 type AuthType {
   user: User!
   token: String!
+  userRoles: [String!]!
 }
 
 type Query {
   users: [User!]!
-  user(id: Float!): User!
+  user(id: Float!): UserType!
   userByEmail(email: String!): User!
   roles: [Role!]!
   userRoles(id: Float!): [Role!]!
-  games: [Game!]!
-  game(id: Float!): Game!
   bets: [Bet!]!
   bet(id: Float!): Bet!
+  games: [Game!]!
+  game(id: Float!): Game!
 }
 
 type Mutation {
@@ -58,12 +64,12 @@ type Mutation {
   updateUser(data: UpdateUserInput!, id: Float!): User!
   deleteUser(id: Float!): Boolean!
   createRole(data: CreateRoleInput!): Role!
+  createBet(data: CreateBetInput!): Bet!
+  deleteBet(id: Float!): Boolean!
   createGame(data: CreateGameInput!): Game!
   deleteGame(id: Float!): Boolean!
   updateGame(data: UpdateGameInput!, id: Float!): Game!
   login(data: AuthInput!): AuthType!
-  createBet(data: CreateBetInput!): Bet!
-  deleteBet(id: Float!): Boolean!
 }
 
 input CreateUserInput {
@@ -80,6 +86,12 @@ input UpdateUserInput {
 
 input CreateRoleInput {
   role_name: String!
+}
+
+input CreateBetInput {
+  filled_numbers: String!
+  userId: Float!
+  gameId: Float!
 }
 
 input CreateGameInput {
@@ -103,10 +115,4 @@ input UpdateGameInput {
 input AuthInput {
   email: String!
   password: String!
-}
-
-input CreateBetInput {
-  filled_numbers: String!
-  userId: Float!
-  gameId: Float!
 }

@@ -1,6 +1,7 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ForbiddenError } from "apollo-server-express";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
 
@@ -18,14 +19,14 @@ export class isAdminGuard{
         const tokenPayload = this.parseJwt(token)
         const user = await this.userRepository.find({relations: ['roles']})
         for (let i = 0; i < user.length; i++) {
-            if(user[i].id === tokenPayload.sub){ //TA DANDO ERRO AQUI PQ O REQ.USER É UNDEFINED
+            if(user[i].id === tokenPayload.sub){ 
                 for (let j = 0; j < user[i].roles.length; j++) {
                    if(user[i].roles[j].role_name === "admin")
                     return true
                 }
             }   
         }
-        throw new UnauthorizedException('Only admin has access to this method')
+        throw new ForbiddenException('Only admin has access to this method')
     }
 
     parseJwt(token: string){
